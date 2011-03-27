@@ -102,6 +102,9 @@
                     [newRow release];
                 }
                 else {
+                    [rows release];
+                    [newSection release];
+                    [newSections release];
                     return NO;
                 }
             }
@@ -113,6 +116,7 @@
             [newSection release];
         }
         else {
+            [newSections release];
             return NO;
         }
     }
@@ -122,36 +126,33 @@
     return YES;
 }
 
-#pragma mark - Data Handling
+#pragma mark - Section Management
 
 - (void)addSection:(PXSimpleTableSection*)section
 {
-    [_sections addObject:section];
-    [section setAdapter:self];
-    
-    [self.tableView reloadData];
+    NSUInteger index = [_sections count];
+	[self insertSection:section atIndex:index];
 }
 
-- (void)addRow:(PXSimpleTableRow*)row toSection:(PXSimpleTableSection*)section
+- (void)insertSection:(PXSimpleTableSection *)section atIndex:(NSUInteger)index 
 {
-    [(NSMutableArray*)section.rows addObject:row];
-    
-    [self.tableView reloadData];
+	[_sections insertObject:section atIndex:index];
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationFade];
 }
+
+- (void)removeSection:(PXSimpleTableSection *)section 
+{
+	NSUInteger index = [_sections indexOfObject:section];
+	[_sections removeObject:section];
+	
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+#pragma mark - Data Handling
 
 - (PXSimpleTableRow*)rowAtIndexPath:(NSIndexPath*)indexPath
 {
     return [[[self.sections objectAtIndex:indexPath.section] rows] objectAtIndex:indexPath.row];
-}
-
-- (NSInteger)indexOfSectionInTable:(PXSimpleTableSection*)section
-{
-    return [self.sections indexOfObject:section];
-}
-
-- (NSInteger)indexOfRowInSection:(PXSimpleTableRow*)row
-{
-    return [row.section.rows indexOfObject:row];
 }
 
 #pragma mark - Selection
