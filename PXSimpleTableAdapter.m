@@ -148,6 +148,11 @@
 	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationFade];
 }
 
+- (PXSimpleTableSection*)sectionAtIndex:(NSUInteger)index
+{
+    return [self.sections objectAtIndex:index];
+}
+
 #pragma mark - Data Handling
 
 - (PXSimpleTableRow*)rowAtIndexPath:(NSIndexPath*)indexPath
@@ -170,10 +175,7 @@
 
 - (void)deselectRow:(PXSimpleTableRow*)row
 {
-    NSUInteger sectionIndex = [self.sections indexOfObject:row.section];
-    NSUInteger rowIndex = [row.section.rows indexOfObject:row];
-    
-    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex] animated:YES];
+    [self.tableView deselectRowAtIndexPath:row.indexPath animated:YES];
 }
 
 #pragma mark - Custom Accessors
@@ -191,15 +193,14 @@
 
 - (void)setSections:(NSArray*)newSections
 {
-    NSMutableArray *s = [newSections mutableCopy];
-
     //Untag ourselves from the sections
     for(PXSimpleTableSection *theSection in _sections) {
         theSection.adapter=nil;
     }
     
-    [_sections release];
-    _sections = s;
+	id old = _sections;
+    _sections = [newSections mutableCopy];
+	[old release];
     
     //Tag ourselves to the new sections
     for(PXSimpleTableSection *theSection in _sections) {
@@ -207,6 +208,11 @@
     }
     
     [self.tableView reloadData];
+}
+
+- (NSArray *)sections 
+{
+	return [[_sections copy] autorelease];
 }
 
 #pragma mark - UITableView

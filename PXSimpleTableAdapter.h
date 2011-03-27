@@ -21,15 +21,16 @@
 }
 
 @property (nonatomic, assign) IBOutlet id<PXSimpleTableAdapterDelegate> delegate;
-@property (nonatomic, assign) IBOutlet UITableView *tableView;
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, retain) NSArray *sections;
 
 - (BOOL)setUpTableFromPropertyList:(id)propertyList;
 
-
 - (void)addSection:(PXSimpleTableSection*)section;
 - (void)insertSection:(PXSimpleTableSection *)section atIndex:(NSUInteger)index;
 - (void)removeSection:(PXSimpleTableSection *)section;
+
+- (PXSimpleTableSection*)sectionAtIndex:(NSUInteger)index;
 
 - (PXSimpleTableRow*)selectedRow;
 - (PXSimpleTableRow*)rowAtIndexPath:(NSIndexPath*)indexPath;
