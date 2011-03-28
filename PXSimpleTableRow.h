@@ -29,6 +29,7 @@ typedef void (^PXSimpleTableRowSelectionHandler) (PXSimpleTableRow *row);
 @property (nonatomic, copy) PXSimpleTableRowSelectionHandler accessoryTappedBlock;
 @property (nonatomic, assign) UITableViewCellAccessoryType accessoryType;
 
+@property (nonatomic, readonly) UITableViewCell *representedCell;
 @property (nonatomic, readonly) PXSimpleTableSection *section;
 @property (nonatomic, readonly) NSIndexPath *indexPath;
 
@@ -39,5 +40,10 @@ typedef void (^PXSimpleTableRowSelectionHandler) (PXSimpleTableRow *row);
 - (id)initWithTitle:(NSString*)title;
 - (id)initWithTitle:(NSString*)title icon:(UIImage*)icon;
 - (id)initWithTitle:(NSString *)title icon:(UIImage *)icon selectionHandler:(PXSimpleTableRowSelectionHandler)selectionHandler;
+
++ (NSString*)cellIdentifier;
++ (UITableViewCell*)newCellForRow;
+
+- (void)setUpContentsOfCell:(UITableViewCell*)cell;
 
 @end
